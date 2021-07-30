@@ -54,9 +54,17 @@ async def process_results(itunes_code: int, itunes_results: any,
             description = f"{found['type']} - {found['status']} premiered on {found['premiered']}\n\n" \
                           f"{found['summary']}"
             url = found["url"]
-            result = SearchResult(title=title, kind=kind, description = description, url = url, source="tvmaze")
+            result = SearchResult(title=title, kind=kind, description=description, url=url, source="tvmaze")
             final_results.append(result)
 
+        if 0 <= i < len(people_results):
+            found = people_results[i]
+            print(f"found: {found}")
+            result = SearchResult(title=found["title"],
+                                  kind="people",
+                                  description=found["description"],
+                                  source="people")
+            final_results.append(result)
 
     return True, final_results
 

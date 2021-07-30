@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Literal
+from typing import List, Literal, Optional
 
 from pydantic import BaseModel, HttpUrl
 
@@ -32,7 +32,7 @@ class Sources(str, Enum):
 class SearchResult(BaseModel):
     title: str
     kind: ResultTypes
-    url: HttpUrl
+    url: Optional[HttpUrl]
     description: str
     source: Sources
 

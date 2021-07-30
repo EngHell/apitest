@@ -52,7 +52,7 @@ async def get_people_results(q: str) -> Tuple[int, Any]:
 
                     results.append({
                         "title": name,
-                        "link": None,
+                        "url": None,
                         "description": f"Birthed on {dob}, with an ssn of {ssn}"
                     })
             else:
