@@ -25,9 +25,7 @@ async def process_results(itunes_code: int, itunes_results: any,
             found = itunes_results[i]
 
             title = found["trackName"]
-            print(f"untranslated kind {found['kind']}")
             kind = found["kind"]
-            print(f"kind {kind}")
             description = f"By artist {found['artistName']} and of the collection {found['collectionName']}"
             url = found["previewUrl"]
             result = SearchResult(title=title,
