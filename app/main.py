@@ -30,7 +30,7 @@ fake_users_db = {
 }
 
 
-api = FastAPI()
+app = FastAPI()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -108,7 +108,7 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
 
 
 
-@api.get("/", response_model=SearchResponse)
+@app.get("/", response_model=SearchResponse)
 async def search(
         q: str, mode: SearchSources = "all",
         max_results_per_source: Optional[int] = Query(10, ge=1, le=30),
@@ -125,7 +125,7 @@ async def search(
     return final_result
 
 
-@api.post("/token", response_model=Token)
+@app.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(fake_users_db, form_data.username, form_data.password)
     if not user:
@@ -141,6 +141,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@api.get("/users/me")
+@app.get("/users/me")
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return current_user
