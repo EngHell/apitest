@@ -3,18 +3,21 @@ import json
 from enum import Enum
 from typing import List, Any, Tuple, Optional
 import asyncio
-from fastapi import FastAPI, Response, status, HTTPException, Query
+from fastapi import FastAPI, Response, status, HTTPException, Query, Depends
+from fastapi.security import OAuth2PasswordBearer
 
 from models import SearchSources, SearchResponse, SearchResult, ResultTypes
 from results import get_results
 
 api = FastAPI()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @api.get("/", response_model=SearchResponse)
 async def search(
         q: str, mode: SearchSources = "all",
-        max_results_per_source: Optional[int] = Query(10, ge=1, le=30)
+        max_results_per_source: Optional[int] = Query(10, ge=1, le=30),
+        token: str = Depends(oauth2_scheme)
     ) -> SearchResponse:
     success, results = await get_results(q, mode, max_results_per_source)
 
