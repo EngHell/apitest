@@ -1,9 +1,9 @@
 import aiohttp
 import json
 from enum import Enum
-from typing import List, Any, Tuple
+from typing import List, Any, Tuple, Optional
 import asyncio
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Query
 
 from engines import get_itunes_results, get_tvmaze_results, get_people_results
 from models import SearchSources, SearchResponse, SearchResult, ResultTypes
@@ -14,7 +14,7 @@ api = FastAPI()
 async def process_results(itunes_code: int, itunes_results: any,
                           tvmaze_code: int, tvmaze_results: any,
                           people_code: int, people_results,
-                          max_results_per_source=10) -> Tuple[bool, List[SearchResult]]:
+                          max_results_per_source) -> Tuple[bool, List[SearchResult]]:
     if not itunes_code == 200 and not tvmaze_code == 200 and not people_code == 200:
         return False, []
 
@@ -69,7 +69,7 @@ async def process_results(itunes_code: int, itunes_results: any,
     return True, final_results
 
 
-async def get_results(q: str, mode: SearchSources) -> Tuple[bool, List[SearchResult]]:
+async def get_results(q: str, mode: SearchSources, max_results_per_source) -> Tuple[bool, List[SearchResult]]:
     if mode == SearchSources.all or mode == SearchSources.itunes:
         itunes_code, itunes_results = await get_itunes_results(q)
     else:
@@ -90,14 +90,17 @@ async def get_results(q: str, mode: SearchSources) -> Tuple[bool, List[SearchRes
 
     success, results = await process_results(itunes_code, itunes_results,
                                        tvmaze_code, tvmaze_results,
-                                       people_code, people_results)
+                                       people_code, people_results, max_results_per_source)
 
     return success, results
 
 
 @api.get("/", response_model=SearchResponse)
-async def search(response: Response, q: str, mode: SearchSources = "all") -> SearchResponse:
-    success, results = await get_results(q, mode)
+async def search(
+        q: str, mode: SearchSources = "all",
+        max_results_per_source: Optional[int] = Query(10, ge=1, le=30)
+    ) -> SearchResponse:
+    success, results = await get_results(q, mode, max_results_per_source)
 
     if not success:
         raise HTTPException(500,
