@@ -22,11 +22,18 @@ class ResultTypes(str, Enum):
     artist = "artist"
 
 
+class Sources(str, Enum):
+    itunes = "itunes"
+    tvmaze = "tvmaze"
+    people = "people"
+
+
 class SearchResult(BaseModel):
     title: str
     kind: ResultTypes
     url: HttpUrl
     description: str
+    sources: Sources
 
 
 class SearchResponse(BaseModel):
@@ -37,5 +44,5 @@ class SearchResponse(BaseModel):
 class SearchSources(str, Enum):
     itunes = "itunes"
     tvmaze = "tvmaze"
-    personas = "personas"
+    people = "people"
     all = "all"
