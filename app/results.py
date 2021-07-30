@@ -17,7 +17,6 @@ async def process_results(itunes_code: int, itunes_results: any,
     for i in range(0, max_results_per_source):
         if 0 <= i < len(itunes_results):
             found = itunes_results[i]
-            print(f"found{found} \n\n\n-------------")
 
             if "trackName" in found:
                 title = found["trackName"]
@@ -30,7 +29,6 @@ async def process_results(itunes_code: int, itunes_results: any,
             else:
                 kind = found["wrapperType"]
 
-            print(f"kind:{kind}")
             description = f"By artist {found['artistName']}"
             url = found["previewUrl"]
             result = SearchResult(title=title,
@@ -53,7 +51,6 @@ async def process_results(itunes_code: int, itunes_results: any,
 
         if 0 <= i < len(people_results):
             found = people_results[i]
-            print(f"found: {found}")
             result = SearchResult(title=found["title"],
                                   kind="people",
                                   description=found["description"],
