@@ -20,6 +20,7 @@ class ResultTypes(str, Enum):
     song = "song"
     tv_episode = "tv-episode"
     artist = "artist"
+    audiobook = "audiobook"
 
 
 class Sources(str, Enum):

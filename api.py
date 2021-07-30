@@ -23,17 +23,40 @@ async def process_results(itunes_code: int, itunes_results: any,
     for i in range(0, max_results_per_source):
         if 0 <= i < len(itunes_results):
             found = itunes_results[i]
+            print(f"found{found} \n\n\n-------------")
 
-            title = found["trackName"]
-            kind = found["kind"]
-            description = f"By artist {found['artistName']} and of the collection {found['collectionName']}"
+            if "trackName" in found:
+                title = found["trackName"]
+            elif "collectionName" in found:
+                title = found["collectionName"]
+            else:
+                title = "not name found."
+            if "kind" in found:
+                kind = found["kind"]
+            else:
+                kind = found["wrapperType"]
+
+            print(f"kind:{kind}")
+            description = f"By artist {found['artistName']}"
             url = found["previewUrl"]
             result = SearchResult(title=title,
                                   kind=kind,
                                   description=description,
-                                  url=url
+                                  url=url,
+                                  source="itunes"
                                   )
             final_results.append(result)
+
+        if 0 <= i < len(tvmaze_results):
+            found = tvmaze_results[i]["show"]
+            title = found["name"]
+            kind = "show"
+            description = f"{found['type']} - {found['status']} premiered on {found['premiered']}\n\n" \
+                          f"{found['summary']}"
+            url = found["url"]
+            result = SearchResult(title=title, kind=kind, description = description, url = url, source="tvmaze")
+            final_results.append(result)
+
 
     return True, final_results
 
