@@ -4,6 +4,17 @@ from typing import List, Literal, Optional
 from pydantic import BaseModel, HttpUrl
 
 
+class User(BaseModel):
+    username: str
+    email: str
+    full_name: Optional[str] = None
+    disabled: Optional[bool] = None
+
+class UserInDB(User):
+    hashed_password: str
+
+
+
 class ResultTypes(str, Enum):
     people = "people"
     show = "show"
