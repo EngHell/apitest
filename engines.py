@@ -12,7 +12,7 @@ async def get_itunes_results(q: str) -> Tuple[int, Any]:
             data = await resp.read()
 
     if code == 200:
-        results = json.loads(data)
+        results = json.loads(data)["results"]
     else:
         results = data
 
