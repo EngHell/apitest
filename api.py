@@ -8,7 +8,6 @@ from fastapi import FastAPI
 
 from engines import get_itunes_results, get_tvmaze_results, get_people_results
 from models import SearchSources
-import xml.etree.ElementTree as ET
 
 api = FastAPI()
 

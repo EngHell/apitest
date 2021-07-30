@@ -1,3 +1,10 @@
+import json
+from typing import Tuple, Any
+
+import xml.etree.ElementTree as ET
+import aiohttp
+
+
 async def get_itunes_results(q: str) -> Tuple[int, Any]:
     async with aiohttp.ClientSession() as session:
         async with session.get(f"https://itunes.apple.com/search?term={q}") as resp:
