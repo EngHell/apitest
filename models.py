@@ -33,7 +33,7 @@ class SearchResult(BaseModel):
     kind: ResultTypes
     url: HttpUrl
     description: str
-    sources: Sources
+    source: Sources
 
 
 class SearchResponse(BaseModel):
